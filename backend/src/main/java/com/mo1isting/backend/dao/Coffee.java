@@ -17,6 +17,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Coffee {
+    /**
+     * 主键
+     */
     @TableId(type = IdType.AUTO)
     private int coffeeId;
     private String coffeeName;
