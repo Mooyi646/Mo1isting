@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 9999
 
 spring:
   datasource:
@@ -8,9 +8,9 @@ spring:
     username: root
     password: 1111
 
-mybatis:
+mybatis-plus:
   configuration:
-    map-underscore-to-camel-case: true #下划线转驼峰
+    map-underscore-to-camel-case: false #下划线转驼峰
   mapper-locations: classpath:mapper/*.xml
 
 logging:

@@ -1,6 +1,6 @@
 package com.mo1isting.backend;
 
-import com.mo1isting.backend.dao.Coffee;
+import com.mo1isting.backend.entity.Coffee;
 import com.mo1isting.backend.mapper.CoffeeMapper;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;

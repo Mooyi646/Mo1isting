@@ -1,27 +1,28 @@
 package com.mo1isting.backend.service;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.mo1isting.backend.dao.User;
+import com.mo1isting.backend.entity.User;
 import com.mo1isting.backend.exception.CustomException;
 import com.mo1isting.backend.mapper.UserMapper;
 import jakarta.annotation.Resource;
-import org.apache.ibatis.annotations.Lang;
+import org.springframework.stereotype.Service;
 
 /**
  * 功能:
  * 作者： Mooyi
  * 日期： 2023/8/27 21:04
  */
+@Service
 public class UserService extends ServiceImpl<UserMapper, User> {
     @Resource
     private UserMapper userMapper;
 
     /**
      * 用户登录
-     * @param user
+     * @param userName
+     * @param userPassword
      * @return
      */
     public User login(User user){

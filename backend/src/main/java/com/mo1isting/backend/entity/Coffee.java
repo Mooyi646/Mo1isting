@@ -1,4 +1,4 @@
-package com.mo1isting.backend.dao;
+package com.mo1isting.backend.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

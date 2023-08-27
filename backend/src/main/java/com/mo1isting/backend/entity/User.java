@@ -1,8 +1,8 @@
-package com.mo1isting.backend.dao;
+package com.mo1isting.backend.entity;
 
-import ch.qos.logback.core.joran.action.AppenderRefAction;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("user")
 public class User {
     @TableId(type = IdType.AUTO)
     private int uid;
