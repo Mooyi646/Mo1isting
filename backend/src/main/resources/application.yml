@@ -1,0 +1,13 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/molisting
+    username: root
+    password: 1111
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true #下划线转驼峰
