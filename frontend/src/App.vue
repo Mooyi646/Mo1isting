@@ -7,3 +7,9 @@ import Login from './views/Login.vue'
 <template>
   <Login />
 </template>
+
+<style>
+html,body,#app{
+  height: 100%;
+}
+</style>

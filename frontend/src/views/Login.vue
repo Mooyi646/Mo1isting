@@ -1,35 +1,47 @@
 <template>
     <!--设置背景-->
-    <div class="background" style="width:100%;  
-        height:100%;  /**宽高100%是为了图片铺满屏幕 */
-        z-index:-1;
-        position: absolute;">
-        <el-image src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202308272149932.gif" width="100%" height="100%" alt="" />
+    <div class="background">
+      <div class="backgroundpic">
+        <el-image src="/for_web/suica/AF004465_04.gif" />
+      </div>
+        <div class="login-card">
+    <a-card title="Welcome to Mo1isting"  hoverable="true" :bordered="false" style="width:100%; height: 100%;">
+      <div class="components-input-demo-presuffix">
+    <a-input v-model:value="userName" placeholder="请输入用户名/手机号/邮箱">
+      <template #prefix>
+        <user-outlined />
+      </template>
+    </a-input>
+    <br />
+    <br />
+    <br />
+    <a-input-password v-model:value="userPassword" placeholder="请输入密码" >
+      <template #prefix>
+        <KeyOutlined />
+      </template>
+      </a-input-password>
+      <br />
+      <br />
+      <br />
+      <a-button type="primary">登  录</a-button>
+  </div>
+    </a-card>
+  </div>
     </div>
-        <div style="width:45%;margin-left:53%;margin-top:90px">
-            <va-card  stripe >
-                <va-card-title><div style="margin:auto; width:100%">
-            <el-image  style="width: 20%; height: 20%;vertical-align: middle;" src="/logos/1.png" />
-            <span style="font-weight:bolder; font-size:large; color:#004BAC">在线教育系统</span>
-        </div></va-card-title>
-        <va-card-title>登录</va-card-title>
-        <el-form ref="form" :model="form" :rules="rules">
-        <va-card-content><div style="width:100%;margin-left:20%; font-size:small;color:#919494">用户名/邮箱/电话 </div></va-card-content>
-        <va-card-content><el-form-item prop="account"><el-input style="width:210px;margin-left:20%" v-model="form.account" placeholder="请输入用户名/邮箱/电话" clearable></el-input></el-form-item></va-card-content>
-        <va-card-content><span  style="width:100%;margin-left:20%;font-size:small;color:#919494">密码 </span></va-card-content>
-        <va-card-content><el-form-item prop="password"><el-input style="width:210px;margin-left:20%" v-model="form.password" placeholder="请输入密码" clearable show-password></el-input></el-form-item></va-card-content>
-        <va-card-content><div style="width:100%; margin-left:30%"><el-button color="#004BAC" @click="login">登录</el-button></div></va-card-content>
-        <va-card-content><span style="font-size:small;color:#919494"><a href="/register">无账号？点击注册</a></span></va-card-content>
-        </el-form>
-            </va-card>
-        </div>
     
     </template>
     
     <script> 
     import request from '@/utils/request'
+    import {
+      UserOutlined,KeyOutlined
+} from '@ant-design/icons-vue';
     
     export default{
+      components:{
+        UserOutlined,
+        KeyOutlined
+      },
     data(){
         return{
             form:{
@@ -84,3 +96,25 @@
     }
           
     </script>
+
+<style>
+.background{
+  background: #e3d1d1;
+  margin-top: 130px;
+  margin-left: 100px; 
+  width: 900px;
+  height:400px;  /**宽高100%是为了图片铺满屏幕 */
+  display: flex;
+}
+.backgroundpic{
+  width:50%; 
+  height: 100%;
+  position: absolute;
+}
+.login-card{
+  padding: 30px;
+  width: 400px;
+  margin-left: 53%;
+  height: 400px;
+}
+</style>

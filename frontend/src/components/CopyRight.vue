@@ -1,0 +1,3 @@
+<template>
+    A footer.
+</template>
