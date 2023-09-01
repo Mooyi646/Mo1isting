@@ -7,7 +7,7 @@
         <div class="login-card">
     <a-card title="Welcome to Mo1isting"  hoverable="true" :bordered="false" style="width:100%; height: 100%;">
       <div class="components-input-demo-presuffix">
-    <a-input v-model:value="userName" placeholder="请输入用户名/手机号/邮箱">
+    <a-input v-model:value="form.account" placeholder="请输入用户名/手机号/邮箱">
       <template #prefix>
         <user-outlined />
       </template>
@@ -15,7 +15,7 @@
     <br />
     <br />
     <br />
-    <a-input-password v-model:value="userPassword" placeholder="请输入密码" >
+    <a-input-password v-model:value="form.userPassword" placeholder="请输入密码" >
       <template #prefix>
         <KeyOutlined />
       </template>
@@ -23,7 +23,7 @@
       <br />
       <br />
       <br />
-      <a-button type="primary">登  录</a-button>
+      <a-button  block="true" @click="login">登  录</a-button>
   </div>
     </a-card>
   </div>
@@ -33,9 +33,7 @@
     
     <script> 
     import request from '@/utils/request'
-    import {
-      UserOutlined,KeyOutlined
-} from '@ant-design/icons-vue';
+    import {UserOutlined,KeyOutlined} from '@ant-design/icons-vue';
     
     export default{
       components:{
@@ -46,16 +44,8 @@
         return{
             form:{
               account:'',
-              password:'',
+              userPassword:'',
             },
-            rules: {
-            account: [
-              {required: true, message: '用户名不为空', trigger: 'blur'},
-            ],
-            password: [
-              {required: true, message: '密码不为空', trigger: 'blur'},
-            ],
-          },
         }
     },
     create(){
@@ -63,15 +53,9 @@
     },
     methods:{
         login () {
-          
-          this.$refs['form'].validate((valid) => {
-            if (valid) {
-    // 参数保存
-    let formData = new FormData();
-    formData.append('userName',this.form.account);
-    formData.append('userPassword',this.form.password);
+          // 参数保存
     //用户登录
-              request.post('/user/login',formData
+              request.post('/user/login',this.form
               ).then(res => {
                 if (res.code == 20000) {
                   this.$message({
@@ -89,11 +73,8 @@
                 }
               })
               
-            }})
-    
-        }
-    }
-    }
+            }}
+          }
           
     </script>
 
