@@ -6,8 +6,10 @@ import com.mo1isting.backend.exception.CustomException;
 import com.mo1isting.backend.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -37,16 +39,16 @@ public class UserController {
 
     /**
      * 登录
-     * @param user
+     * @param map
      * @param request
      * @return
      */
     @PostMapping("/login")
-    public Result<User> login(@RequestBody User user, HttpServletRequest request){
-        User res = userService.login(user);
+    public Result<User> login(@RequestBody Map map,
+                              HttpServletRequest request){
+        Result<User> res = userService.login(map.get("account").toString(),map.get("userPassword").toString());
         request.getSession().setAttribute("user",res);
-        MAP.put(res.getUserName(),res);
-        return Result.success(res);
+        return res;
     }
 
     /**
