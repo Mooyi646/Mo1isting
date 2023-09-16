@@ -2,6 +2,7 @@ import axios from 'axios'
 import router from "../router"
 
 
+
 //后端已跨域处理
 const request = axios.create({
 	baseURL: 'http://localhost:9999',  // 注意！！ 这里是全局统一加上了 后端接口前缀 前缀，后端必须进行跨域配置！

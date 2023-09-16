@@ -1,12 +1,12 @@
 package com.mo1isting.backend.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mo1isting.backend.common.Result;
 import com.mo1isting.backend.entity.User;
 import com.mo1isting.backend.exception.CustomException;
 import com.mo1isting.backend.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -45,7 +45,7 @@ public class UserController {
      */
     @PostMapping("/login")
     public Result<User> login(@RequestBody Map map,
-                              HttpServletRequest request){
+                              HttpServletRequest request) throws JsonProcessingException {
         Result<User> res = userService.login(map.get("account").toString(),map.get("userPassword").toString());
         request.getSession().setAttribute("user",res);
         return res;
@@ -63,9 +63,9 @@ public class UserController {
             user.setUserPassword("123456");
         }
 
-        User dbUser = userService.register(user);
-        request.getSession().setAttribute("user",user);
+        Result<User> res = userService.register(user);
+        request.getSession().setAttribute("user",res);
 
-        return Result.success(dbUser);
+        return res;
     }
 }
