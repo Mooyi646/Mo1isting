@@ -4,21 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mo1isting.backend.common.utils.TokenUtil;
 import com.mo1isting.backend.common.Result;
 import com.mo1isting.backend.entity.User;
-import com.mo1isting.backend.exception.CustomException;
 import com.mo1isting.backend.mapper.UserMapper;
 import jakarta.annotation.Resource;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.regex.Pattern;
 
 /**
- * 功能:
+ * 功能: UserService
  * 作者： Mooyi
  * 日期： 2023/8/27 21:04
  */
@@ -29,6 +25,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     /**
      * 用户登录
+     *
      * @param account
      * @param userPassword
      * @return
@@ -61,6 +58,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     /**
      * 登录账号类型
+     *
      * @param account
      * @return
      */
@@ -85,11 +83,12 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     /**
      * 用户注册
+     *
      * @param user
      * @return
      */
     public Result register(User user){
-        User one = getOne((Wrappers.<User>lambdaQuery().eq(User::getUserName,user.getUserName())));
+        User one = getOne((Wrappers.<User>lambdaQuery().eq(User::getUserName, user.getUserName())));
         if(one != null){
             return Result.error("-1","用户已注册");
         }
@@ -99,11 +98,52 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     /**
      * 根据用户名查询用户
+     *
      * @param userName
      * @return
      */
-    public User getByUserName(String userName){
+    public Result<User> getUserInfoByUserName(String userName) {
         User one = getOne((Wrappers.<User>lambdaQuery().eq(User::getUserName, userName)));
-        return one;
+        one.setUserPassword("******");
+        if (one != null) {
+            return Result.success(one);
+        }
+        else{
+            return Result.error("-1", "获取用户信息失败");
+        }
+    }
+
+    /**
+     * 用户注销
+     *
+     * @param userName
+     * @return
+     */
+    public Result<String> deleteUser(String userName) {
+        int res = userMapper.delete(Wrappers.<User>lambdaQuery().eq(User::getUserName, userName));
+        if (res == 0) {
+            return Result.error("-1", "用户注销失败");
+        }
+        else {
+            return Result.success(new String("用户注销成功"));
+        }
+    }
+
+    /**
+     * 更新用户信息
+     *
+     * @param user
+     * @return
+     */
+    public Result<User> updateUserInfo(User user) {
+        int res = userMapper.update(user, Wrappers.<User>lambdaQuery().eq(User::getUserName, user.getUserName()));
+        if (res == 0) {
+            return Result.error("-1", "用户信息注销失败");
+        }
+        else {
+            User one = getOne((Wrappers.<User>lambdaQuery().eq(User::getUserName, user.getUserName())));
+            one.setUserPassword("******");
+            return Result.success(one);
+        }
     }
 }

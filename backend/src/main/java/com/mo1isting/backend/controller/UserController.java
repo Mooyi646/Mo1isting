@@ -68,4 +68,46 @@ public class UserController {
 
         return res;
     }
+
+    /**
+     * 根据 userName 获取用户信息
+     *
+     * @param userName
+     * @param request
+     * @return
+     */
+    @PostMapping("/getUserInfo")
+    public Result<User> getUserInfo(@RequestParam(value="userName") String userName, HttpServletRequest request){
+        Result<User> res = userService.getUserInfoByUserName(userName);
+        request.getSession().setAttribute("user", res);
+        return res;
+    }
+
+    /**
+     * 根据 userName 注销账户
+     *
+     * @param userName
+     * @param request
+     * @return
+     */
+    @PostMapping("/logout")
+    public Result<String> deleteUser(@RequestParam(value="userName") String userName, HttpServletRequest request){
+        Result<String> res = userService.deleteUser(userName);
+        request.getSession().setAttribute("user", res);
+        return res;
+    }
+
+    /**
+     * 更新用户信息
+     *
+     * @param user
+     * @param request
+     * @return
+     */
+    @PostMapping("/updateUserInfo")
+    public Result<User> updateUserInfo(@RequestBody User user, HttpServletRequest request){
+        Result<User> res = userService.updateUserInfo(user);
+        request.getSession().setAttribute("user", res);
+        return res;
+    }
 }
