@@ -10,8 +10,9 @@ import com.mo1isting.backend.mapper.CoffeeMapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能: CoffeeService
@@ -24,6 +25,30 @@ public class CoffeeService extends ServiceImpl<CoffeeMapper, Coffee> {
     @Resource
     CoffeeMapper coffeeMapper;
 
+
+    /**
+     * 处理过程map
+     * 处理方法， 1：'水洗',2： '日晒',3： '蜜处理',4： '香精'
+     */
+    private static Map<String, Integer> processMap = new HashMap<>();
+
+    /**
+     * 烘焙度map
+     * 1:'浅烘', 2:'中烘', 3:'中深烘', 4:'深烘'
+     */
+    private static Map<String, Integer> roastMap = new HashMap<>();
+
+    static{
+        processMap.put("水洗", 1);
+        processMap.put("日晒", 2);
+        processMap.put("蜜处理", 3);
+        processMap.put("香精", 4);
+
+        roastMap.put("浅烘", 1);
+        roastMap.put("中烘", 2);
+        roastMap.put("中深烘", 3);
+        roastMap.put("深烘", 4);
+    }
 
     /**
      * 添加咖啡，使用coffeeName & coffeeShop 唯一确定咖啡
@@ -105,12 +130,15 @@ public class CoffeeService extends ServiceImpl<CoffeeMapper, Coffee> {
      */
     public Result<List<Coffee>> searchCoffee(int pageNum, int pageSize, String content) {
         QueryWrapper<Coffee> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("coffeeName", content).or()
-                .eq("coffeeRoast", content).or()
-                .eq("coffeeOrigin", content).or()
-                .eq("coffeeFlavor", content).or()
-                .eq("coffeeProcess", content);
+        queryWrapper.like("coffeeName", content).or(
+                wrapper -> wrapper.like("coffeeShop", content).or(
+                wrappers1 -> wrappers1.eq("coffeeRoast", roastMap.get(content)).or(
+                        wrappers2 -> wrappers2.like("coffeeOrigin", content).or(
+                                wrappers3 -> wrappers3.like("coffeeFlavor", content).or(
+                                        wrappers4 -> wrappers4.eq("coffeeProcess", processMap.get(content)))))));
+
         List<Coffee> res = coffeeMapper.selectPage(new Page<>(pageNum, pageSize), queryWrapper).getRecords();
+
         if (res == null) {
             return Result.error("-1", "获取数据失败");
         }
@@ -118,4 +146,5 @@ public class CoffeeService extends ServiceImpl<CoffeeMapper, Coffee> {
             return Result.success(res);
         }
     }
+
 }
