@@ -124,7 +124,7 @@ public class CoffeeService extends ServiceImpl<CoffeeMapper, Coffee> {
      * 根据关键字搜索相关咖啡
      * 关键字可以是：coffeeName, coffeeShop, coffeeRoast, coffeeOrigin, coffeeFlavor, coffeeProcess
      * 即名字，商家，烘焙度，产地，风味，处理方法
-     * TODO:多条件查询有问题，待修改
+     *
      * @param content
      * @return
      */
@@ -146,5 +146,4 @@ public class CoffeeService extends ServiceImpl<CoffeeMapper, Coffee> {
             return Result.success(res);
         }
     }
-
 }
