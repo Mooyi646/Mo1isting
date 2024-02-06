@@ -39,15 +39,20 @@ public class UserController {
 
     /**
      * 登录
-     * @param map
+     * @param account 用户名/手机号/邮箱
+     * @param password 密码
      * @param request
      * @return
      */
     @PostMapping("/login")
-    public Result<User> login(@RequestBody Map map,
+    public Result<Map<String, String>> login(@RequestParam(value = "account")String account,
+                              @RequestParam(value = "password")String password,
                               HttpServletRequest request) throws JsonProcessingException {
-        Result<User> res = userService.login(map.get("account").toString(),map.get("userPassword").toString());
-        request.getSession().setAttribute("user",res);
+        Result<Map<String, String>> res = userService.login(account, password);
+        if(res.getCode() == "0") {
+            request.getSession().setAttribute("userId", res.getData().get("userId"));
+            res.getData().remove("userId");
+        }
         return res;
     }
 

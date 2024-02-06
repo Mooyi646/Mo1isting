@@ -2,6 +2,7 @@ package com.mo1isting.backend.controller;
 
 import com.mo1isting.backend.common.Result;
 import com.mo1isting.backend.entity.Coffee;
+import com.mo1isting.backend.entity.User;
 import com.mo1isting.backend.service.CoffeeService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ public class CoffeeController {
     @Resource
     HttpServletRequest request;
 
+
     /**
      * 添加咖啡
      *
@@ -33,22 +35,24 @@ public class CoffeeController {
      * @return
      */
     @PostMapping("/addCoffee")
-    public Result<String> addCoffee(@RequestBody Coffee coffee, HttpServletRequest request){
-        Result<String> res = coffeeService.addCoffee(coffee);
-        request.getSession().setAttribute("coffee", res);
+    public Result<Coffee> addCoffee(@RequestBody Coffee coffee, HttpServletRequest request){
+        Integer userId = Integer.parseInt((String)request.getSession().getAttribute("userId"));
+        Result<Coffee> res = coffeeService.addCoffee(coffee, userId);
         return res;
     }
 
     /**
      * 删除咖啡
      *
-     * @param map
-     * @param request
+     * @param coffeeName
+     * @param coffeeShop
      * @return
      */
     @PostMapping("/deleteCoffee")
-    public Result deleteCoffee(@RequestBody Map map, HttpServletRequest request){
-        Result res = coffeeService.deleteCoffee(map.get("coffeeName").toString(), map.get("coffeeShop").toString());
+    public Result deleteCoffee(@RequestParam(value = "coffeeName")String coffeeName,
+                               @RequestParam(value = "coffeeShop")String coffeeShop){
+        Integer userId = Integer.parseInt((String)request.getSession().getAttribute("userId"));
+        Result res = coffeeService.deleteCoffee(coffeeName, coffeeShop, userId);
         request.getSession().setAttribute("coffee", res);
         return res;
     }
@@ -57,12 +61,12 @@ public class CoffeeController {
      * 更新咖啡
      *
      * @param coffee
-     * @param request
      * @return
      */
     @PostMapping("/updateCoffee")
-    public Result<Coffee> updateCoffee(@RequestBody Coffee coffee, HttpServletRequest request){
-        Result<Coffee> res = coffeeService.updateCoffee(coffee);
+    public Result<Coffee> updateCoffee(@RequestBody Coffee coffee){
+        Integer userId = Integer.parseInt((String)request.getSession().getAttribute("userId"));
+        Result<Coffee> res = coffeeService.updateCoffee(coffee, userId);
         request.getSession().setAttribute("coffee", res);
         return res;
     }
@@ -70,14 +74,15 @@ public class CoffeeController {
     /**
      * 展示所有coffee，需要分页？
      *
-     * @param request
+     * @param pageSize
+     * @param pageNum
      * @return
      */
     @PostMapping("/getCoffeeList")
     public Result<List<Coffee>> getCoffeeList(@RequestParam(value="pageNum") String pageNum,
-                                              @RequestParam(value="pageSize") String pageSize,
-                                              HttpServletRequest request){
-        Result<List<Coffee>> res = coffeeService.getCoffeeList(Integer.parseInt(pageNum), Integer.parseInt(pageSize));
+                                              @RequestParam(value="pageSize") String pageSize){
+        Integer userId = Integer.parseInt((String)request.getSession().getAttribute("userId"));
+        Result<List<Coffee>> res = coffeeService.getCoffeeList(Integer.parseInt(pageNum), Integer.parseInt(pageSize), userId);
         request.getSession().setAttribute("coffeeList", res);
         return res;
     }
@@ -85,8 +90,9 @@ public class CoffeeController {
     @PostMapping("/search")
     public Result<List<Coffee>> searchCoffee(@RequestParam(value="pageNum") String pageNum,
                                              @RequestParam(value="pageSize") String pageSize,
-                                             @RequestParam(value="content") String content,HttpServletRequest request){
-        Result<List<Coffee>> res = coffeeService.searchCoffee(Integer.parseInt(pageNum), Integer.parseInt(pageSize),content);
+                                             @RequestParam(value="content") String content){
+        Integer userId = Integer.parseInt((String)request.getSession().getAttribute("userId"));
+        Result<List<Coffee>> res = coffeeService.searchCoffee(Integer.parseInt(pageNum), Integer.parseInt(pageSize),content, userId);
         request.getSession().setAttribute("coffeeList", res);
         return res;
     }

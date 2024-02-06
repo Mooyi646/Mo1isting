@@ -11,6 +11,8 @@ import com.mo1isting.backend.mapper.UserMapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -53,7 +55,11 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
         String token = TokenUtil.getToken(one);
 
-        return Result.success(token);
+        Map<String, String> map  = new HashMap<>();
+        map.put("token", token);
+        map.put("userId", String.valueOf(one.getUid()));
+
+        return Result.success(map);
     }
 
     /**

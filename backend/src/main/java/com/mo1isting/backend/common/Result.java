@@ -6,6 +6,9 @@ package com.mo1isting.backend.common;
  * 日期： 2023/8/27 21:20
  */
 public class Result<T> {
+    /**
+     * code 成功是0，失败是-1
+     */
     private String code;
     private String msg;
     private T data;
