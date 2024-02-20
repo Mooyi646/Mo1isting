@@ -2,14 +2,12 @@ package com.mo1isting.backend.controller;
 
 import com.mo1isting.backend.common.Result;
 import com.mo1isting.backend.entity.Coffee;
-import com.mo1isting.backend.entity.User;
 import com.mo1isting.backend.service.CoffeeService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 功能: Coffee相关接口

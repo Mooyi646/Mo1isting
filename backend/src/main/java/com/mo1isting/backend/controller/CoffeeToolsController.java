@@ -30,27 +30,31 @@ public class CoffeeToolsController {
      */
     @PostMapping("/addTool")
     public Result addTool(@RequestBody CoffeeTools tool){
-        Result res = toolsService.addTool(tool);
+        Integer userId = Integer.parseInt((String)request.getSession().getAttribute("userId"));
+        Result res = toolsService.addTool(tool, userId);
         request.getSession().setAttribute("tool", res);
         return res;
     }
 
     @PostMapping("/updateTool")
     public Result<CoffeeTools> updateTool(@RequestBody CoffeeTools tool){
-        Result res = toolsService.updateTool(tool);
+        Integer userId = Integer.parseInt((String)request.getSession().getAttribute("userId"));
+        Result res = toolsService.updateTool(tool, userId);
         return res;
     }
 
     @PostMapping("/deleteTool")
     public Result deleteTool(@RequestParam("toolName") String toolName){
-        Result res = toolsService.deleteTool(toolName);
+        Integer userId = Integer.parseInt((String)request.getSession().getAttribute("userId"));
+        Result res = toolsService.deleteTool(toolName, userId);
         return res;
     }
 
     @PostMapping("/getToolsList")
     public Result<List<CoffeeTools>> getToolsList(@RequestParam("pageNum")String pageNum,
                                                   @RequestParam("pageSize")String pageSize){
-        Result<List<CoffeeTools>> res = toolsService.getToolsList(Integer.parseInt(pageNum), Integer.parseInt(pageSize));
+        Integer userId = Integer.parseInt((String)request.getSession().getAttribute("userId"));
+        Result<List<CoffeeTools>> res = toolsService.getToolsList(Integer.parseInt(pageNum), Integer.parseInt(pageSize), userId);
         return res;
     }
 
@@ -58,7 +62,8 @@ public class CoffeeToolsController {
     public Result<List<CoffeeTools>> searchTools(@RequestParam("pageNum")String pageNum,
                                             @RequestParam("pageSize")String pageSize,
                                             @RequestParam("content")String content){
-        Result<List<CoffeeTools>> res = toolsService.searchTools(Integer.parseInt(pageNum), Integer.parseInt(pageSize), content);
+        Integer userId = Integer.parseInt((String)request.getSession().getAttribute("userId"));
+        Result<List<CoffeeTools>> res = toolsService.searchTools(Integer.parseInt(pageNum), Integer.parseInt(pageSize), content, userId);
         return res;
     }
 }

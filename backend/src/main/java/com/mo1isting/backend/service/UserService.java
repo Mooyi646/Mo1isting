@@ -57,7 +57,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
         Map<String, String> map  = new HashMap<>();
         map.put("token", token);
-        map.put("userId", String.valueOf(one.getUid()));
+        map.put("userId", String.valueOf(one.getUserId()));
 
         return Result.success(map);
     }

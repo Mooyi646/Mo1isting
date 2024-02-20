@@ -24,6 +24,7 @@ public class CoffeeTools {
      */
     @TableId(type = IdType.AUTO)
     private int toolId;
+    private int userId;
     private Date toolBoughtDate;
     private String toolName;
     private String toolPic;

@@ -1,6 +1,6 @@
 package com.mo1isting.backend.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -28,26 +28,26 @@ public class CoffeeToolsService extends ServiceImpl<CoffeeToolsMapper, CoffeeToo
      * @param tool
      * @return
      */
-    public Result addTool(CoffeeTools tool) {
-        CoffeeTools tool1 = toolsMapper.selectOne(Wrappers.<CoffeeTools>lambdaQuery()
-                .eq(CoffeeTools::getToolName, tool.getToolName()));
+    public Result addTool(CoffeeTools tool, Integer userId) {
+        CoffeeTools tool1 = toolsMapper.selectOne(Wrappers.<CoffeeTools>lambdaQuery().eq(CoffeeTools::getToolName, tool.getToolName()));
 
         if (tool1 != null) {
             return Result.error("-1", "器具已存在");
         }
-        else {
-            save(tool);
-            return Result.success();
-        }
+        tool.setUserId(userId);
+        save(tool);
+        return Result.success();
     }
 
     /**
      * 更新器具
+     *
      * @param tool
      * @return
      */
-    public Result updateTool(CoffeeTools tool) {
-        int res = toolsMapper.update(tool, Wrappers.<CoffeeTools>lambdaUpdate().eq(CoffeeTools::getToolId, tool.getToolId()));
+    public Result updateTool(CoffeeTools tool, Integer userId) {
+        int res = toolsMapper.update(tool, Wrappers.<CoffeeTools>lambdaUpdate().eq(CoffeeTools::getToolId, tool.getToolId())
+                .eq(CoffeeTools::getUserId, userId));
         CoffeeTools tool_updated =  toolsMapper.selectOne(Wrappers.<CoffeeTools>lambdaQuery()
                 .eq(CoffeeTools::getToolId, tool.getToolId()));
 
@@ -64,8 +64,8 @@ public class CoffeeToolsService extends ServiceImpl<CoffeeToolsMapper, CoffeeToo
      * @param toolName
      * @return
      */
-    public Result deleteTool(String toolName) {
-        int res = toolsMapper.delete(Wrappers.<CoffeeTools>lambdaQuery().eq(CoffeeTools::getToolName, toolName));
+    public Result deleteTool(String toolName, Integer userId) {
+        int res = toolsMapper.delete(Wrappers.<CoffeeTools>lambdaQuery().eq(CoffeeTools::getToolName, toolName).eq(CoffeeTools::getUserId, userId));
 
         if (res == 0) {
             return Result.error("-1", "器具删除失败");
@@ -81,8 +81,9 @@ public class CoffeeToolsService extends ServiceImpl<CoffeeToolsMapper, CoffeeToo
      * @param pageSize 每页数据量
      * @return
      */
-    public Result<List<CoffeeTools>> getToolsList(int pageNum, int pageSize) {
-        List<CoffeeTools> res = toolsMapper.selectPage(new Page<>(pageNum, pageSize), new QueryWrapper<>()).getRecords();
+    public Result<List<CoffeeTools>> getToolsList(int pageNum, int pageSize, Integer userId) {
+        List<CoffeeTools> res = toolsMapper.selectPage(new Page<>(pageNum, pageSize),
+                new LambdaQueryWrapper<CoffeeTools>().eq(CoffeeTools::getUserId, userId)).getRecords();
 
         if (res == null) {
             return Result.error("-1", "获取数据失败");
@@ -101,11 +102,12 @@ public class CoffeeToolsService extends ServiceImpl<CoffeeToolsMapper, CoffeeToo
      * @param content
      * @return
      */
-    public Result<List<CoffeeTools>> searchTools(int pageNum, int pageSize, String content) {
+    public Result<List<CoffeeTools>> searchTools(int pageNum, int pageSize, String content, Integer userId) {
         List<CoffeeTools> res = toolsMapper.selectPage(new Page<>(pageNum, pageSize),
-                Wrappers.<CoffeeTools>lambdaQuery().like(CoffeeTools::getToolName, content).or(
-                        wrappers -> wrappers.like(CoffeeTools::getToolShop, content).or(
-                                wrappers1 -> wrappers1.like(CoffeeTools::getToolProducer, content)))).getRecords();
+                Wrappers.<CoffeeTools>lambdaQuery().eq(CoffeeTools::getUserId, userId)
+                        .and(superWrapper -> superWrapper.like(CoffeeTools::getToolName, content).or(
+                                wrappers -> wrappers.like(CoffeeTools::getToolShop, content).or(
+                                        wrappers1 -> wrappers1.like(CoffeeTools::getToolProducer, content))))).getRecords();
 
         if (res == null) {
             return Result.error("-1", "搜索失败");
